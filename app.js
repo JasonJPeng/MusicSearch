@@ -14,7 +14,8 @@ var artists_A = [];
 
 
 function displayArtist (tag, A){
-   $(tag).append(
+   var divTag = $("<div>");
+   $(divTag).append(
       $("<div>").text(A.name) ,
       $("<div>").text("twitter: " +  A.twitter),
       $("<img>").attr("src", A.img)
@@ -25,7 +26,8 @@ function displayArtist (tag, A){
       console.log(e);
    })
 
-   $(tag).append(list);
+   $(divTag).append(list);
+   $(tag).prepend(divTag);
 
 }
 
@@ -33,7 +35,7 @@ $(document).ready(function() { //  Beginning of jQuery
    var topArtist = {};
    $("#add-artist").on("click", function () {
        artistName = $("#input-artist").val().trim();
-       alert("searhing for " + artistName);
+       $("#status").text("Searching " + artistName +" ....");
    })
 
 // Find all artists   
@@ -65,7 +67,7 @@ $("#add-artist").on("click", function () {
         if (rating > 20) { 
            var name1 = topArtist.name.replace(" ", "+");
            $.ajax( {
-             url: giphyUrl + name1 + "+music"+ "&api_key=" + giphyKey ,
+             url: corsUrl + giphyUrl + name1 + "+music"+ "&api_key=" + giphyKey ,
              method: "GET",
              dataType: "json"
            }).then(function (gResponse) {
@@ -88,21 +90,17 @@ $("#add-artist").on("click", function () {
              displayArtist("#image-view", topArtist )
                                 
            }); //end of albums
-
+          
         }); // end of giphy 
-                     
-
+            $("#status").text("Top Artist: " + topArtist.name);           
         } else {
-            // @@@@@@ NOT FOUND @@@@@@//
+            $("#status").text("No artist found");
+            // alert("Not there");
         }
          console.log(topArtist);
 
 
-
     });  //end of ajax call for all artists
-
-    
-
 
      
 }) // End Of Click
