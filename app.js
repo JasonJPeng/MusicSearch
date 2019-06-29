@@ -91,7 +91,7 @@ $("#add-artist").on("click", function () {
            }); //end of albums
            setTimeout ( function () {
                    displayArtist("#image-view", topArtist )
-                }   , 1000);
+                }   , 3000);
                       
            
 
