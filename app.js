@@ -87,18 +87,25 @@ $("#add-artist").on("click", function () {
                      relDate: albmRel
                   });
              }); 
-             displayArtist("#image-view", topArtist )
+             displayArtist("#image-view", topArtist );  
+             $("#status").text("Top Artist: " + topArtist.name);  
+             if (artists_A.indexOf(topArtist.name) < 0) {
+                artists_A.push(topArtist.name);
+                $("#showBtn").prepend($("<button>").addClass("TopArtist")
+                              .val(topArtist.name).text(topArtist.name));
+
+                console.log("array==>" , artists_A);
+             }    
                                 
            }); //end of albums
           
         }); // end of giphy 
-            $("#status").text("Top Artist: " + topArtist.name);           
+                     
         } else {
             $("#status").text("No artist found");
             // alert("Not there");
         }
          console.log(topArtist);
-
 
     });  //end of ajax call for all artists
 
