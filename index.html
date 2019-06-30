@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Firebase Core JavaScript Link -->
+  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+  <!-- Specific Firebase products we want (Database) -->
+  <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
     <script type="text/javascript" src="app.js"></script>
 </head>
 
@@ -16,7 +20,7 @@
             <div class="col-9" id="button-list">
             </div>
             <div class="col-3">
-                <div id="status">xxx</div>
+                <div id="status"></div>
                 <form>
                     <div class="input-group input-group-sm mb-3">
 
@@ -34,7 +38,9 @@
 
                 </form>
                 <div id = "showBtn">
-                    <button class="TopArtist" ArtistId = "" ArtisName = "" >xxxx</button>
+                    <!-- <button class="TopArtist" ArtistId = "" ArtisName = "" >xxxx</button> -->
+                    <p>Top Artists</p>
+                    <ul id="topList"></ul>
                 </div>
 
             </div>

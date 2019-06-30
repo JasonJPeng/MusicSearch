@@ -14,6 +14,25 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 var artists_A = [];
 var topArtist = {};
 
+var topNum = 5;
+var topCount = 0;
+
+var config = {
+   apiKey: "AIzaSyAvGvG1R22E4ByFmpVdnZKGA2FZzqizswc",
+   authDomain: "musearch-7ffde.firebaseapp.com",
+   databaseURL: "https://musearch-7ffde.firebaseio.com",
+   projectId: "musearch-7ffde",
+   storageBucket: "",
+   messagingSenderId: "258919187131",
+   appId: "1:258919187131:web:8aa7d0509b6ba628"
+ };
+
+firebase.initializeApp(config);
+var database = firebase.database();
+
+var artistsBase = [];
+var artistInfo = { key: "", name: "", id: "", visits: ""};
+
 
 function displayArtist (tag, A){
    var divTag = $("<div>");
@@ -35,6 +54,28 @@ function displayArtist (tag, A){
 
    $(divTag).append(list);
    $(tag).prepend(divTag);
+
+   var aa = artistsBase.findIndex(obj => obj.id === A.id);
+   var visit1= -1;
+
+   if (aa >= 0 ) {  // updating 
+       visit1 = artistsBase[aa].visits - 1;
+       database.ref().child(artistsBase[aa].key).remove();
+       artistsBase.splice(aa,1);    
+   }
+     
+   var k = database.ref().push({
+      name: A.name,
+      id: A.id,
+      visits: visit1
+   })   
+   
+   // artistsBase.push({
+   //     key: k.key,
+   //     name: A.name,
+   //    id: A.id,
+   //    visits: visit1
+   // })
 
 }
   
@@ -113,8 +154,10 @@ function displayArtist (tag, A){
 
 $(document).ready(function() { //  Beginning of jQuery
 
+
    $("#add-artist").on("click", function () {
       var artistName = $("#input-artist").val().trim();
+      topCount = topNum
       $("#status").text("Searching " + artistName +" ....");
       addTopArtist(artistName);
   })
@@ -125,6 +168,34 @@ $(document).ready(function() { //  Beginning of jQuery
 
   })
 
+  database.ref().orderByChild("visits").on("child_added", function (snapshot){
+     console.log("snapshot==>", snapshot.val());
+   //   artistInfo.key = snapshot.key;
+   //   artistInfo.name = snapshot.val().name;
+   //   artistInfo.id = snapshot.val().id;
+   //   artistInfo.visits = snapshot.val().visits;
+     artistsBase.push( {
+           key: snapshot.key,
+           name: snapshot.val().name,
+           id: snapshot.val().id,
+           visits: snapshot.val().visits
+     });
+     console.log(artistsBase); 
+     if (topCount < topNum) {
+         topCount++;
+         // $("#topList").append($("<li>").text("hhhk"));
+         $("#showBtn").append($("<li>").text(snapshot.val().name + " -- " + snapshot.val().visits*(-1)));
+     }   
+  })
+
+  // Add Top 5 buttons
+  
+//   for (i = (artistsBase.length -1); (i>=0) && (i > artistsBase.length - 5) ; i -- ) {
+
+     
+      
+
+//   }
 
    //   // Find all artists   
    //   $("#add-artist").on("click", function () {
