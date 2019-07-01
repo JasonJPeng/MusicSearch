@@ -81,6 +81,8 @@ function displayArtist (tag, A){
   
   
    function addTopArtist (artistName) {
+      console.log("<==================================>");
+      alert(artistName);
       var rating = 0;
       $.ajax( {
        // url: "https://cors-anywhere.herokuapp.com/https://api.musixmatch.com/ws/1.1/artist.search?q_artist=Prodigy&page_size=5&apikey=5eafbf6ac992f091396b3310ca394d21",
@@ -88,7 +90,10 @@ function displayArtist (tag, A){
        method: "GET",
        dataType: "json"
        }).then( function (response) {
+          console.log("<==================================>", response);
            var artists = response.message.body.artist_list;
+           alert(artists[0].artist.artist_name)
+           
            // console.log(artists);
            artists.forEach( function (e) {
    
@@ -156,6 +161,7 @@ $(document).ready(function() { //  Beginning of jQuery
 
 
    $("#add-artist").on("click", function () {
+      
       var artistName = $("#input-artist").val().trim();
       topCount = topNum
       $("#status").text("Searching " + artistName +" ....");
