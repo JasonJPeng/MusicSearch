@@ -18,7 +18,7 @@ var topArtist = {};
 
 var topNum = 10;
 var topCount = 0;
-var numCol = 4;
+var numCol = 3;
 var iAdded = 0;
 
 var config = {
@@ -44,9 +44,23 @@ var artistInfo = {
 
 
 function displayArtist(tag, A) {
+    var twt = ""
+    if (A.twitter !== "") {
+
+       twt = "twitter:  " + 
+             "<a href=" + A.twitter + "  target = _blank>" + A.twitter +"</a>" ;
+    }
+    var albumList = "";
+    A.albums.forEach(function(e) {
+       albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    })
+    
    if ((iAdded % numCol) === 0 ) {  // add a new row
-  //kadsjfdaisfhalsfhalsk
+     newTag = $(tag).prepend($(`<div class="row" id="program-added-${iAdded}">`));
+   } else {
+      newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
    }
+   iAdded++;
    var htmlCode = `
    <div class="col-md-4"> 
    <div class="card">
@@ -55,20 +69,32 @@ function displayArtist(tag, A) {
            alt="Card image cap">
        <div class="card-body">
            <h5 class="card-title">${A.name}</h5>
-           <p class="card-text">Their Twitter Infomation</p>
+           <p class="card-text">${twt}</p>
            <ul>
-               <li>Album 1</li>
-               <li>Album 2</li>
-               <li>Album 3</li>
-               <li>Album 4</li>
-               <li>Album 5</li>
+               ${albumList}
            </ul>
            <a href="#" class="btn btn-primary">Check out</a>
        </div>
    </div>
 </div>
 `;
-$(tag).prepend($(htmlCode));
+$(newTag).prepend($(htmlCode));
+
+// Updating the array
+var aa = artistsBase.findIndex(obj => obj.id === A.id);
+  var visit1 = -1;
+
+  if (aa >= 0) { // updating
+    visit1 = artistsBase[aa].visits - 1;
+    database.ref().child(artistsBase[aa].key).remove();
+    artistsBase.splice(aa, 1);
+  }
+
+  var k = database.ref().push({
+    name: A.name,
+    id: A.id,
+    visits: visit1
+  })
 
 }
 
@@ -249,6 +275,7 @@ async function addTopArtist(artistName) {
     //
     // display stuff
     //
+    // displayArtist(".container-fluid", topArtist);
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
     
