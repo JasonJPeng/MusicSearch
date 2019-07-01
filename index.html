@@ -41,7 +41,8 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Favarite
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="favoritesDropdown">
                             <a class="dropdown-item" href="#">The Beatles</a>
                             <a class="dropdown-item" href="#">Prince</a>
                             <a class="dropdown-item" href="#">Micheal Jacson</a>
@@ -49,8 +50,7 @@
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" id="input-artist" type="search" placeholder="Search for Music"
-                        aria-label="Search">
+                    <input class="form-control mr-sm-2" id="input-artist" type="search" placeholder="Search for Music" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="add-artist" id="add-artist">Add</button>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="clear" id="clear">Clear</button>
                 </form>
@@ -76,12 +76,12 @@
         </div>
     </div>
 
-    <div id="image-view">Image View</div>
 
-    <div class="container">
+    <div class="container-fluid">
+        <div id="image-view">Image View</div>
         <div class="row">
             <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
+                <div class="card">
                     <img class="card-img-top"
                         src="https://media.udiscovermusic.com/img/artist-toppers/the-beatles-artist-topper.jpg"
                         alt="Card image cap">
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
+                <div class="card">
                     <img class="card-img-top"
                         src="https://media.udiscovermusic.com/img/artist-toppers/the-beatles-artist-topper.jpg"
                         alt="Card image cap">
@@ -119,7 +119,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
+                <div class="card">
                     <img class="card-img-top"
                         src="https://media.udiscovermusic.com/img/artist-toppers/the-beatles-artist-topper.jpg"
                         alt="Card image cap">
@@ -137,23 +137,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="col-md-2">
-                    <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="https://media.udiscovermusic.com/img/artist-toppers/the-beatles-artist-topper.jpg" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">The Beatles 4</h5>
-                            <p class="card-text">Their Twitter Infomation</p>
-                            <ul>
-                                <li>Album 1</li>
-                                <li>Album 2</li>
-                                <li>Album 3</li>
-                                <li>Album 4</li>
-                                <li>Album 5</li>
-                            </ul>
-                            <a href="#" class="btn btn-primary">Check out</a>
-                        </div>
-                    </div>
-                </div> -->
         </div>
 
 
