@@ -3,6 +3,7 @@ body {
     max-width: 100%;
 }
 
+
 .container-fluid {
     padding-top: 200px;
     max-width: 100%;
@@ -22,9 +23,12 @@ body {
     width: 100%;
 }
 
+/* li#topartist {
+    list-style-type: none;  
+} */
+
 #favorite {
     margin-top: 100px;
-    background: pink;
     text-align: center;
 }
 
@@ -37,7 +41,6 @@ body {
 #showBtn {
     padding-top: 50px;
     text-align: center;
-    background: orange;
 }
 
 #showBtn {
@@ -54,10 +57,10 @@ body {
 }
 
 img {
-    /* height: 100px;
-    width: 100px; */
     border-radius: 50px;
-    /* margin-bottom: 10px; */
+    width: 30%;
+    float: left;
+    margin: 1.66%;
 }
 
 ul {
@@ -67,6 +70,7 @@ ul {
 @media (max-width: 500px) {
     .col-md-4 {
         max-width: 100%;
+        text-align:center;
     }
 }
 
