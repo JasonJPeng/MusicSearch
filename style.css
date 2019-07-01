@@ -8,39 +8,35 @@ body {
     max-width: 100%;
 }
 
+#favorite {
+    margin-top: 100px;
+}
+
 #showBtn {
-    margin-top:200px;
+    margin-top:5t0px;
 }
 
 #list-items {
     font-size: 20px;
     text-align: center;
 }
-/* custom color for Columns */
-.col-md-6 {
-    background-color: red;
-    border: solid 2px;
-}
-.col-md-2 {
-    background-color: green;
-}
 
-.col-md-4 {
-    background-color: purple;
+.col-md-2 {
+    margin: 20px;
 }
 
 ul {
     list-style-type: none;
   }
 
-  #displayVideo {
+  /* #displayVideo {
       padding: 20px;
-  }
-
+  } */
+/* 
   @media (max-width: 500px) {
       .video-responsive iframe {
           width:"300px";
           height:"200px";
           position:absolute;
       }
-  }
+  } */
