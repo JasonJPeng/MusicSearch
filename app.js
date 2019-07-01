@@ -9,6 +9,10 @@ var albumUrl = "https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=";
 var giphyKey = "453HTooEbMcLLHXzAyh12R3VvCGhpBWI";
 var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 
+// https://www.youtube.com/results?search_query=Lady+Gaga+music
+var youTubeUrl = "https://www.youtube.com/results?search_query=";
+
+
 var artists_A = [];
 var topArtist = {};
 
@@ -49,7 +53,7 @@ function displayArtist(tag, A) {
   
   var albumTag = $("<ul>");
       A.albums.forEach(function(e) {
-      albumTag.append($("<li>").text(e.name + " release:" + e.relDate));   
+      albumTag.append($("<li>").html(e.name + "<br>(" + e.relDate + ")"));   
   })
 
   divTag.append(
@@ -123,12 +127,14 @@ async function saveAlbumInfo(response) {
 
 async function updateStatus(topArtist) {
   $("#status").text("Top Artist: " + topArtist.name);
+
   if (artists_A.indexOf(topArtist.name) < 0) {
     artists_A.push(topArtist.name);
     var myBtn = ($("<button>").addClass("TopArtist")
       .val(topArtist.name).text(topArtist.name));
-    var aTag = $("<a>").addClass("dropdown-item")
-                       .attr("href", "#").text(topArtist.name)  
+    var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
+                       .attr("href", youTubeUrl + topArtist.name.replace(" ", "+") + "+music")
+                       .text(topArtist.name)  
 
       $("#favorite").prepend(myBtn);
       $("#dropDown").prepend(aTag);
