@@ -2,60 +2,81 @@
 <html lang="en-US">
 
 <head>
-    <title>Musearch</title>
+    <title>MuSearch</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <!-- Firebase Core JavaScript Link -->
+     <!-- Firebase Core JavaScript Link -->
   <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
   <!-- Specific Firebase products we want (Database) -->
   <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
     <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 
 <body>
-    <h1>MuSearch</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+
+            <a class="navbar-brand" href="#"><i class="fa fa-music"></i> MuSearch</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto navbar-right nav-main">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Album</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Favarite
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">The Beatles</a>
+                    <a class="dropdown-item" href="#">Prince</a>
+                    <a class="dropdown-item" href="#">Micheal Jacson</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" id="input-artist" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Submit</button>
+        </form>
+        <div id="status">keiko</div>
+    </div>
+    </div>
+    </nav>
+    <div id="showBtn">
+        <p>Top Artist</p>
+        <ul id="topList"></ul>
+    </div>
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col-9" id="button-list">
-            </div>
-            <div class="col-3">
-                <div id="status"></div>
-                <form>
-                    <div class="input-group input-group-sm mb-3">
-
-                        <input type="text" id="input-artist" class="form-control" aria-label="medium"
-                            aria-describedby="inputGroup-sizing-md">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-md">
-                                Enter an artist name
-                            </span>
-                        </div>
-                    </div>
-
-                    <input class="btn-sm btn-primary" type="button" value="Add" id="add-artist">
-                    <input class="btn-sm btn-primary" type="button" value="Clear" id="clear-artist">
-
-                </form>
-                <div id = "showBtn">
-                    <!-- <button class="TopArtist" ArtistId = "" ArtisName = "" >xxxx</button> -->
-                    <p>Top Artists</p>
-                    <ul id="topList"></ul>
-                </div>
-
-            </div>
+            <div class="col-md-6" >latest Tweets</div>
+            <div class="col-md-3" >name </div>
+            <div class="col-md-3" id="playList">rating</div>
         </div>
         <div class="row">
-            <div class="col-9" id="image-view">
-
-                
-
-            </div>
-            <div class="col-3" id="user-input">
-
-            </div>
+            <div class="col-md-2" id="playList">pic</div>
+            <div class="col-md-6" id="playList">account info</div>
+            <div class="col-md-4" id="playList">Right</div>
         </div>
-
+        <div class="row">
+            <div class="col-md-4" id="playList">Left</div>
+            <div class="col-md-4" id="playList">Middle</div>
+            <div class="col-md-4" id="playList">news</div>
+        </div>
     </div>
 
 

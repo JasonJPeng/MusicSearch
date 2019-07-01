@@ -1,0 +1,46 @@
+body {
+    display: block;
+    max-width: 100%;
+}
+
+.container-fluid {
+    padding-top: 200px;
+    max-width: 100%;
+}
+
+#showBtn {
+    margin-top:200px;
+}
+
+#list-items {
+    font-size: 20px;
+    text-align: center;
+}
+/* custom color for Columns */
+.col-md-6 {
+    background-color: red;
+    border: solid 2px;
+}
+.col-md-2 {
+    background-color: green;
+}
+
+.col-md-4 {
+    background-color: purple;
+}
+
+ul {
+    list-style-type: none;
+  }
+
+  #displayVideo {
+      padding: 20px;
+  }
+
+  @media (max-width: 500px) {
+      .video-responsive iframe {
+          width:"300px";
+          height:"200px";
+          position:absolute;
+      }
+  }
