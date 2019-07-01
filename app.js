@@ -42,6 +42,33 @@ var artistInfo = {
 
 
 function displayArtist(tag, A) {
+   var htmlCode = `
+   <div class="col-md-4"> 
+   <div class="card">
+       <img class="card-img-top"
+           src= "${A.img}"
+           alt="Card image cap">
+       <div class="card-body">
+           <h5 class="card-title">${A.name}</h5>
+           <p class="card-text">Their Twitter Infomation</p>
+           <ul>
+               <li>Album 1</li>
+               <li>Album 2</li>
+               <li>Album 3</li>
+               <li>Album 4</li>
+               <li>Album 5</li>
+           </ul>
+           <a href="#" class="btn btn-primary">Check out</a>
+       </div>
+   </div>
+</div>
+`;
+$(tag).prepend($(htmlCode));
+
+}
+
+
+function displayArtist1(tag, A) {
   var divTag = $("<div>").addClass("card").attr("style", "width: 18rem;");
   var aTag = $("<div>");
   if (A.twitter !== "") {
