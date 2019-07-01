@@ -18,6 +18,8 @@ var topArtist = {};
 
 var topNum = 10;
 var topCount = 0;
+var numCol = 4;
+var iAdded = 0;
 
 var config = {
   apiKey: "AIzaSyAvGvG1R22E4ByFmpVdnZKGA2FZzqizswc",
@@ -42,6 +44,9 @@ var artistInfo = {
 
 
 function displayArtist(tag, A) {
+   if ((iAdded % numCol) === 0 ) {  // add a new row
+  //kadsjfdaisfhalsfhalsk
+   }
    var htmlCode = `
    <div class="col-md-4"> 
    <div class="card">
