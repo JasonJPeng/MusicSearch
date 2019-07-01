@@ -56,7 +56,7 @@ function displayArtist(tag, A) {
       imgTag, $("<h5>").addClass("card-title").text(A.name),
       $("<p>").addClass("card-text").append(aTag), albumTag
   );
-  
+
   $(tag).prepend(divTag);
 
 
@@ -110,11 +110,14 @@ async function saveAlbumInfo(response) {
   var albums = response.message.body.album_list;
   albums.forEach(function(albm) {
     albmName = albm.album.album_name;
-    albmRel = albm.album.album_release_date;
-    topArtist.albums.push({
-      name: albmName,
-      relDate: albmRel
-    });
+    
+    if (topArtist.albums.findIndex(o => o.name === albmName ) < 0) {  // Album Name not found
+       albmRel = albm.album.album_release_date;
+       topArtist.albums.push({
+       name: albmName,
+       relDate: albmRel
+     });
+    } // end If 
   });
 }
 
