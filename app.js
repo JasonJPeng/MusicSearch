@@ -51,9 +51,17 @@ function displayArtist(tag, A) {
 
   var imgTag = $("<img>").addClass("card-img-top").attr("src", A.img);
   
+  
+  
+
   var albumTag = $("<ul>");
       A.albums.forEach(function(e) {
-      albumTag.append($("<li>").html(e.name + "<br>(" + e.relDate + ")"));   
+        var relD = "";
+        if (e.relDate.trim() !== "") {
+          relD = "<br>(" + e.relDate + ")";
+       }
+        albumTag.append($("<li>").html(e.name + relD));  
+     
   })
 
   divTag.append(
