@@ -49,3 +49,10 @@ ul {
           position:absolute;
       }
   } */
+
+  /* Added By Jason */
+
+  .card {
+      margin:20px;
+      float:left;
+  }

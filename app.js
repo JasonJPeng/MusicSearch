@@ -137,7 +137,7 @@ async function getArtistRating(artists) {
   artists.forEach(function(e) {
 
     if (parseInt(e.artist.artist_rating) >= rating) {
-      rating = e.artist.artist_rating;
+      rating = parseInt(e.artist.artist_rating);
       topArtist = {
         id: e.artist.artist_id,
         rating: rating,
@@ -179,11 +179,12 @@ async function addTopArtist(artistName) {
     //
     // get artist rating, bail if < 20
     //
-    rating = getArtistRating(artists);
+    rating = await getArtistRating(artists);
+    
     if (rating < 20) {
       $("#status").text("No artist found");
       return;
-    }
+    } 
     response = await getGiphy(topArtist);
     topArtist.img = response.data[0].images.fixed_height_still.url;
     //
@@ -199,6 +200,7 @@ async function addTopArtist(artistName) {
     //
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
+    
   } catch (error) {
     alert(error);
   };
