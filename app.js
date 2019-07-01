@@ -12,7 +12,7 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 var artists_A = [];
 var topArtist = {};
 
-var topNum = 5;
+var topNum = 10;
 var topCount = 0;
 
 var config = {
@@ -125,8 +125,13 @@ async function updateStatus(topArtist) {
   $("#status").text("Top Artist: " + topArtist.name);
   if (artists_A.indexOf(topArtist.name) < 0) {
     artists_A.push(topArtist.name);
-    $("#showBtn").prepend($("<button>").addClass("TopArtist")
+    var myBtn = ($("<button>").addClass("TopArtist")
       .val(topArtist.name).text(topArtist.name));
+    var aTag = $("<a>").addClass("dropdown-item")
+                       .attr("href", "#").text(topArtist.name)  
+
+      $("#favorite").prepend(myBtn);
+      $("#dropDown").prepend(aTag);
 
     console.log("array==>", artists_A);
   }
@@ -241,7 +246,7 @@ $(document).ready(function() { //  Beginning of jQuery
     if (topCount < topNum) {
       topCount++;
       // $("#topList").append($("<li>").text("hhhk"));
-      $("#showBtn").append($("<li>").text(snapshot.val().name + " -- " + snapshot.val().visits * (-1)));
+      $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
     }
   })
 
