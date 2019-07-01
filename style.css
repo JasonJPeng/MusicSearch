@@ -12,13 +12,32 @@ body {
     margin: 10px;
 }
 
+#input-artist {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #08f;
+    text-shadow: 0 0 0 #000;
+    min-width: 100px;
+    max-width: 160px;
+    width: 100%;
+}
+
 #favorite {
     margin-top: 100px;
+    background: pink;
+    text-align: center;
+}
+
+.artistBtn { 
+    background: #F4F4F4;
+    padding:10px;
+    margin: 5px;
 }
 
 #showBtn {
-    /* border: 2px solid red; */
+    padding-top: 50px;
     text-align: center;
+    background: orange;
 }
 
 #showBtn {
@@ -34,13 +53,25 @@ body {
     margin: 20px;
 }
 
+img {
+    /* height: 100px;
+    width: 100px; */
+    border-radius: 50px;
+    /* margin-bottom: 10px; */
+}
+
 ul {
     list-style-type: none;
   }
 
-  /* #displayVideo {
-      padding: 20px;
-  } */
+@media (max-width: 500px) {
+    .col-md-4 {
+        max-width: 100%;
+    }
+}
+
+
+
 /* 
   @media (max-width: 500px) {
       .video-responsive iframe {
@@ -48,4 +79,4 @@ ul {
           height:"200px";
           position:absolute;
       }
-  } */
+  }
