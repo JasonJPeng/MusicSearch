@@ -1,8 +1,12 @@
 body {
     display: block;
     max-width: 100%;
+    margin-bottom: 50px;
 }
 
+img {
+    margin: 0 !important;
+}
 
 .container-fluid {
     padding-top: 200px;
@@ -23,9 +27,9 @@ body {
     width: 100%;
 }
 
-/* li#topartist {
-    list-style-type: none;  
-} */
+h2 {
+    font-size: 3em;
+}
 
 #favorite {
     margin-top: 100px;
@@ -41,6 +45,7 @@ body {
 #showBtn {
     padding-top: 50px;
     text-align: center;
+    margin: auto;
 }
 
 #showBtn {
@@ -56,15 +61,18 @@ body {
 }
 
 img {
-    border-radius: 50px;
     width: 30%;
     float: left;
     margin: 1.66%;
 }
 
-ul {
-    list-style-type: none;
-  }
+.card {
+    margin-top:10px;
+}
+
+.card:hover {
+    box-shadow: 4px 4px 20px black;
+}
 
 @media (max-width: 500px) {
     .col-md-4 {
@@ -73,26 +81,12 @@ ul {
     }
 }
 
-
-
-/* 
-  @media (max-width: 500px) {
-      .video-responsive iframe {
-          width:"300px";
-          height:"200px";
-          position:absolute;
-      }
-  } */
-
-  /* Added By Jason */
-
-  .card {
-      margin:20px;
-      float:left;
-  }
-
   ul#topList li {
       display: inline;
       margin: 0 20px 0 0
   }
   
+  footer {
+      background: gray;
+      height: 50px;
+  }
