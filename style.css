@@ -8,12 +8,21 @@ body {
     max-width: 100%;
 }
 
+#add-artist {
+    margin: 10px;
+}
+
 #favorite {
     margin-top: 100px;
 }
 
 #showBtn {
-    margin-top:5t0px;
+    /* border: 2px solid red; */
+    text-align: center;
+}
+
+#showBtn {
+    margin-top:50px;
 }
 
 #list-items {
