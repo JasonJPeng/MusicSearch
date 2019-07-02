@@ -21,6 +21,8 @@ var topCount = 0;
 var numCol = 4;
 var iAdded = 0;
 
+var defaultIds = [];
+
 var config = {
   apiKey: "AIzaSyAvGvG1R22E4ByFmpVdnZKGA2FZzqizswc",
   authDomain: "musearch-7ffde.firebaseapp.com",
@@ -307,24 +309,44 @@ $(document).ready(function() { //  Beginning of jQuery
   })
 
   database.ref().orderByChild("visits").on("child_added", function(snapshot) {
-    console.log("snapshot==>", snapshot.val());
-    //   artistInfo.key = snapshot.key;
-    //   artistInfo.name = snapshot.val().name;
-    //   artistInfo.id = snapshot.val().id;
-    //   artistInfo.visits = snapshot.val().visits;
-    artistsBase.push({
+      artistsBase.push({
       key: snapshot.key,
       name: snapshot.val().name,
       id: snapshot.val().id,
       visits: snapshot.val().visits
     });
-    console.log(artistsBase);
+    // console.log(artistsBase);
     if (topCount < topNum) {
+      defaultIds.push(snapshot.val().name);
       topCount++;
+      
+      var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
+                       .attr("href", youTubeUrl + snapshot.val().name.replace(" ", "+") + "+music")
+                       .text(snapshot.val().name)  
+
+      // $("#favorite").prepend(myBtn);
+      $("#dropDown").prepend(aTag);
+      
+      // displayArtist("#image-view", snapshot.val);
       // $("#topList").append($("<li>").text("hhhk"));
+
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
-    }
+    } 
   })
+  setTimeout ( function () {
+    console.log(defaultIds);
+    function doit(n) {
+       n--; 
+       if (n>=0) {
+         setTimeout (function ()  {
+           addTopArtist(defaultIds[n]);
+           doit(n);
+         }, 2000) 
+       }
+    }
+    doit(topNum);
+  } , 2000);
+   
 
   // Add Top 5 buttons
 
