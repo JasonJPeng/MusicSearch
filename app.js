@@ -18,7 +18,7 @@ var topArtist = {};
 
 var topNum = 10;
 var topCount = 0;
-var numCol = 4;
+var numCol = 3;
 var iAdded = 0;
 
 var defaultIds = [];
@@ -65,7 +65,7 @@ function displayArtist(tag, A) {
    }
    iAdded++;
   var htmlCode = `
-  <div class="col-md-3">
+  <div class="col-md-4">
                     <div class="card">
                         <img class="card-img-top"
                             src="${A.img}"
@@ -76,13 +76,13 @@ function displayArtist(tag, A) {
                             <ul>
                             ${albumList}
                             </ul>
-                            <a href="#" class="btn btn-primary">Check out</a>
+                            
                         </div>
                     </div>
                 </div>
   `;
-
-   
+   // check out button , no use now
+  // <a href="#" class="btn btn-primary">Check out</a>
 $(newTag).prepend($(htmlCode));
 
 // Updating the array
@@ -183,7 +183,6 @@ async function getAlbums(topArtist) {
 
 async function saveAlbumInfo(response) {
   var albums = response.message.body.album_list;
-  console.log("====",albums);
   albums.forEach(function(albm) {
     albmName = albm.album.album_name;
     
@@ -281,6 +280,7 @@ async function addTopArtist(artistName) {
     //
     // display stuff
     //
+    // displayArtist(".container-fluid", topArtist);
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
     
@@ -317,10 +317,7 @@ $(document).ready(function() { //  Beginning of jQuery
     });
     // console.log(artistsBase);
     if (topCount < topNum) {
-      defaultIds.push({
-          id:snapshot.val().id,
-          name: snapshot.val().name
-      })   
+      defaultIds.push(snapshot.val().name);
       topCount++;
       
       var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
@@ -328,7 +325,7 @@ $(document).ready(function() { //  Beginning of jQuery
                        .text(snapshot.val().name)  
 
       // $("#favorite").prepend(myBtn);
-      $("#dropDown").prepend(aTag);
+      // $("#dropDown").prepend(aTag);
       
       // displayArtist("#image-view", snapshot.val);
       // $("#topList").append($("<li>").text("hhhk"));
@@ -336,23 +333,19 @@ $(document).ready(function() { //  Beginning of jQuery
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
     } 
   })
-
-     setTimeout( async function() {
-     console.log(defaultIds);
-     topArtist.name = defaultIds[2].name;
-     topArtist.id = defaultIds[2].id;
-     response = await getGiphy(topArtist);
-     topArtist.img = response.data[0].images.fixed_width_still.url;
-     console.log(topArtist);
-     response = await getAlbums(topArtist);
-     saveAlbumInfo(response);
-     displayArtist("#image-view", topArtist);
-     updateStatus(topArtist);
-  
-  }, 2000)
-
-
-  
+  setTimeout ( function () {
+    console.log(defaultIds);
+    function doit(n) {
+       n--; 
+       if (n>=0) {
+         setTimeout (function ()  {
+           addTopArtist(defaultIds[n]);
+           doit(n);
+         }, 2000) 
+       }
+    }
+    doit(topNum);
+  } , 2000);
    
 
   // Add Top 5 buttons
