@@ -18,7 +18,7 @@ var topArtist = {};
 
 var topNum = 10;
 var topCount = 0;
-var numCol = 3;
+var numCol = 4;
 var iAdded = 0;
 
 var config = {
@@ -56,28 +56,31 @@ function displayArtist(tag, A) {
     })
     
    if ((iAdded % numCol) === 0 ) {  // add a new row
-     newTag = $(tag).prepend($(`<div class="row" id="program-added-${iAdded}">`));
+     newTag = $(`<div class="row" id="program-added-${iAdded}">`);
+     $(tag).append(newTag);
    } else {
       newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
    }
    iAdded++;
-   var htmlCode = `
-   <div class="col-md-4"> 
-   <div class="card">
-       <img class="card-img-top"
-           src= "${A.img}"
-           alt="Card image cap">
-       <div class="card-body">
-           <h5 class="card-title">${A.name}</h5>
-           <p class="card-text">${twt}</p>
-           <ul>
-               ${albumList}
-           </ul>
-           <a href="#" class="btn btn-primary">Check out</a>
-       </div>
-   </div>
-</div>
-`;
+  var htmlCode = `
+  <div class="col-md-3">
+                    <div class="card">
+                        <img class="card-img-top"
+                            src="${A.img}"
+                            alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">${A.name}</h5>
+                            <p class="card-text">${A.twt}</p>
+                            <ul>
+                            ${albumList}
+                            </ul>
+                            <a href="#" class="btn btn-primary">Check out</a>
+                        </div>
+                    </div>
+                </div>
+  `;
+
+   
 $(newTag).prepend($(htmlCode));
 
 // Updating the array
@@ -196,13 +199,13 @@ async function updateStatus(topArtist) {
 
   if (artists_A.indexOf(topArtist.name) < 0) {
     artists_A.push(topArtist.name);
-    var myBtn = ($("<button>").addClass("TopArtist")
-      .val(topArtist.name).text(topArtist.name));
+    // var myBtn = ($("<button>").addClass("TopArtist")
+    //   .val(topArtist.name).text(topArtist.name));
     var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
                        .attr("href", youTubeUrl + topArtist.name.replace(" ", "+") + "+music")
                        .text(topArtist.name)  
 
-      $("#favorite").prepend(myBtn);
+      // $("#favorite").prepend(myBtn);
       $("#dropDown").prepend(aTag);
 
     console.log("array==>", artists_A);
@@ -263,7 +266,7 @@ async function addTopArtist(artistName) {
       return;
     } 
     response = await getGiphy(topArtist);
-    topArtist.img = response.data[0].images.fixed_height_still.url;
+    topArtist.img = response.data[0].images.fixed_width_still.url;
     //
     // get albums
     //
