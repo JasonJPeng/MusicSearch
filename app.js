@@ -12,6 +12,10 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 // https://www.youtube.com/results?search_query=Lady+Gaga+music
 var youTubeUrl = "https://www.youtube.com/results?search_query=";
 
+// https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=lady+gaga+music&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU
+
+youTubeSearch = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=";
+youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
 
 var artists_A = [];
 var topArtist = {};
@@ -46,6 +50,24 @@ var artistInfo = {
 
 
 function displayArtist(tag, A) {
+
+  // Updating the array
+var aa = artistsBase.findIndex(obj => obj.id === A.id);
+var visit1 = -1;
+
+if (aa >= 0) { // updating
+  visit1 = artistsBase[aa].visits - 1;
+  database.ref().child(artistsBase[aa].key).remove();
+  artistsBase.splice(aa, 1);
+}
+
+var k = database.ref().push({
+  name: A.name,
+  id: A.id,
+  visits: visit1
+})
+   nameSearched = A.name + "(" + visit1*(-1) +")";
+
     var twt = ""
     if (A.twitter !== "") {
 
@@ -71,106 +93,31 @@ function displayArtist(tag, A) {
                             src="${A.img}"
                             alt="Card image cap">
                         <div class="card-body">
-                            <h5 class="card-title">${A.name}</h5>
+                            <h5 class="card-title">${nameSearched}</h5>
                             <p class="card-text">${twt}</p>
                             <ul>
                             ${albumList}
                             </ul>
-                            
+                            <a href="${A.youTube}" target="popup" class="btn btn-primary">Play</a>
                         </div>
                     </div>
                 </div>
   `;
    // check out button , no use now
-  // <a href="#" class="btn btn-primary">Check out</a>
+  // <a href="#" class="btn btn-primary">Play</a>
 $(newTag).prepend($(htmlCode));
 
-// Updating the array
-var aa = artistsBase.findIndex(obj => obj.id === A.id);
-  var visit1 = -1;
 
-  if (aa >= 0) { // updating
-    visit1 = artistsBase[aa].visits - 1;
-    database.ref().child(artistsBase[aa].key).remove();
-    artistsBase.splice(aa, 1);
-  }
-
-  var k = database.ref().push({
-    name: A.name,
-    id: A.id,
-    visits: visit1
-  })
 
 }
 
 
-function displayArtist1(tag, A) {
-  var divTag = $("<div>").addClass("card").attr("style", "width: 18rem;");
-  var aTag = $("<div>");
-  if (A.twitter !== "") {
-    aTag = $("<div>").text("twitter:  ");
-    aTag.append($("<a>").attr("href", A.twitter).text(A.twitter).attr("target", "_blank"));
-  }
-
-  var imgTag = $("<img>").addClass("card-img-top").attr("src", A.img);
-  
-  
-  
-
-  var albumTag = $("<ul>");
-      A.albums.forEach(function(e) {
-        var relD = "";
-        if (e.relDate.trim() !== "") {
-          relD = "<br>(" + e.relDate + ")";
-       }
-        albumTag.append($("<li>").html(e.name + relD));  
-     
-  })
-
-  divTag.append(
-      imgTag, $("<h5>").addClass("card-title").text(A.name),
-      $("<p>").addClass("card-text").append(aTag), albumTag
-  );
-
-  $(tag).prepend(divTag);
-
-
-  // $(divTag).append(
-  //   $("<div>").text(A.name),
-  //   aTag,
-  //   $("<img>").attr("src", A.img)
-  // )
-  // var list = $("<ul>");
-  // A.albums.forEach(function(e) {
-  //   list.append($("<li>").text(e.name + " release:" + e.relDate));
-  //   console.log(e);
-  // })
-
-  // $(divTag).append(list);
-  
-
-  var aa = artistsBase.findIndex(obj => obj.id === A.id);
-  var visit1 = -1;
-
-  if (aa >= 0) { // updating
-    visit1 = artistsBase[aa].visits - 1;
-    database.ref().child(artistsBase[aa].key).remove();
-    artistsBase.splice(aa, 1);
-  }
-
-  var k = database.ref().push({
-    name: A.name,
-    id: A.id,
-    visits: visit1
-  })
-
-  // artistsBase.push({
-  //     key: k.key,
-  //     name: A.name,
-  //    id: A.id,
-  //    visits: visit1
-  // })
-
+async function getYouTube(topArtist) {
+   return $.ajax({
+      url: youTubeSearch + topArtist.name.replace(" ", "+") + "+music" + youTubeAPI,
+      method: "GET",
+      dataType: "json"
+   })
 }
 
 async function getAlbums(topArtist) {
@@ -277,6 +224,11 @@ async function addTopArtist(artistName) {
     // save album info
     //
     saveAlbumInfo(response);
+
+    // get YouTube Stuff
+    response = await getYouTube(topArtist);
+    topArtist.youTube = "https://www.youtube.com/watch?v=" + response.items[0].id.videoId
+    console.log(response.items[0].id.videoId);
     //
     // display stuff
     //
@@ -285,7 +237,7 @@ async function addTopArtist(artistName) {
     updateStatus(topArtist);
     
   } catch (error) {
-    alert(error);
+    console.log("ERROR: ",error)
   };
 }
 
@@ -293,6 +245,7 @@ async function addTopArtist(artistName) {
 
 $(document).ready(function() { //  Beginning of jQuery
 
+  // YouTube Video
 
   $("#add-artist").on("click", function(event) {
     event.preventDefault();
@@ -344,8 +297,8 @@ $(document).ready(function() { //  Beginning of jQuery
          }, 2000) 
        }
     }
-    doit(topNum);
-  } , 2000);
+    doit(defaultIds.length);
+  } , 5000);
    
 
   // Add Top 5 buttons
