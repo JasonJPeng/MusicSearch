@@ -59,7 +59,7 @@ function displayArtist(tag, A) {
     
    if ((iAdded % numCol) === 0 ) {  // add a new row
      newTag = $(`<div class="row" id="program-added-${iAdded}">`);
-     $(tag).append(newTag);
+     $(tag).prepend(newTag);
    } else {
       newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
    }
@@ -72,7 +72,7 @@ function displayArtist(tag, A) {
                             alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">${A.name}</h5>
-                            <p class="card-text">${A.twt}</p>
+                            <p class="card-text">${twt}</p>
                             <ul>
                             ${albumList}
                             </ul>
@@ -183,6 +183,7 @@ async function getAlbums(topArtist) {
 
 async function saveAlbumInfo(response) {
   var albums = response.message.body.album_list;
+  console.log("====",albums);
   albums.forEach(function(albm) {
     albmName = albm.album.album_name;
     
@@ -280,7 +281,6 @@ async function addTopArtist(artistName) {
     //
     // display stuff
     //
-    // displayArtist(".container-fluid", topArtist);
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
     
@@ -317,7 +317,10 @@ $(document).ready(function() { //  Beginning of jQuery
     });
     // console.log(artistsBase);
     if (topCount < topNum) {
-      defaultIds.push(snapshot.val().name);
+      defaultIds.push({
+          id:snapshot.val().id,
+          name: snapshot.val().name
+      })   
       topCount++;
       
       var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
@@ -333,19 +336,23 @@ $(document).ready(function() { //  Beginning of jQuery
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
     } 
   })
-  setTimeout ( function () {
-    console.log(defaultIds);
-    function doit(n) {
-       n--; 
-       if (n>=0) {
-         setTimeout (function ()  {
-           addTopArtist(defaultIds[n]);
-           doit(n);
-         }, 2000) 
-       }
-    }
-    doit(topNum);
-  } , 2000);
+
+     setTimeout( async function() {
+     console.log(defaultIds);
+     topArtist.name = defaultIds[2].name;
+     topArtist.id = defaultIds[2].id;
+     response = await getGiphy(topArtist);
+     topArtist.img = response.data[0].images.fixed_width_still.url;
+     console.log(topArtist);
+     response = await getAlbums(topArtist);
+     saveAlbumInfo(response);
+     displayArtist("#image-view", topArtist);
+     updateStatus(topArtist);
+  
+  }, 2000)
+
+
+  
    
 
   // Add Top 5 buttons
