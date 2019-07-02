@@ -18,6 +18,10 @@ var topArtist = {};
 
 var topNum = 10;
 var topCount = 0;
+var numCol = 3;
+var iAdded = 0;
+
+var defaultIds = [];
 
 var config = {
   apiKey: "AIzaSyAvGvG1R22E4ByFmpVdnZKGA2FZzqizswc",
@@ -42,6 +46,65 @@ var artistInfo = {
 
 
 function displayArtist(tag, A) {
+    var twt = ""
+    if (A.twitter !== "") {
+
+       twt = "twitter:  " + 
+             "<a href=" + A.twitter + "  target = _blank>" + A.twitter +"</a>" ;
+    }
+    var albumList = "";
+    A.albums.forEach(function(e) {
+       albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    })
+    
+   if ((iAdded % numCol) === 0 ) {  // add a new row
+     newTag = $(`<div class="row" id="program-added-${iAdded}">`);
+     $(tag).prepend(newTag);
+   } else {
+      newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
+   }
+   iAdded++;
+  var htmlCode = `
+  <div class="col-md-4">
+                    <div class="card">
+                        <img class="card-img-top"
+                            src="${A.img}"
+                            alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">${A.name}</h5>
+                            <p class="card-text">${twt}</p>
+                            <ul>
+                            ${albumList}
+                            </ul>
+                            
+                        </div>
+                    </div>
+                </div>
+  `;
+   // check out button , no use now
+  // <a href="#" class="btn btn-primary">Check out</a>
+$(newTag).prepend($(htmlCode));
+
+// Updating the array
+var aa = artistsBase.findIndex(obj => obj.id === A.id);
+  var visit1 = -1;
+
+  if (aa >= 0) { // updating
+    visit1 = artistsBase[aa].visits - 1;
+    database.ref().child(artistsBase[aa].key).remove();
+    artistsBase.splice(aa, 1);
+  }
+
+  var k = database.ref().push({
+    name: A.name,
+    id: A.id,
+    visits: visit1
+  })
+
+}
+
+
+function displayArtist1(tag, A) {
   var divTag = $("<div>").addClass("card").attr("style", "width: 18rem;");
   var aTag = $("<div>");
   if (A.twitter !== "") {
@@ -138,13 +201,13 @@ async function updateStatus(topArtist) {
 
   if (artists_A.indexOf(topArtist.name) < 0) {
     artists_A.push(topArtist.name);
-    var myBtn = ($("<button>").addClass("TopArtist")
-      .val(topArtist.name).text(topArtist.name));
+    // var myBtn = ($("<button>").addClass("TopArtist")
+    //   .val(topArtist.name).text(topArtist.name));
     var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
                        .attr("href", youTubeUrl + topArtist.name.replace(" ", "+") + "+music")
                        .text(topArtist.name)  
 
-      $("#favorite").prepend(myBtn);
+      // $("#favorite").prepend(myBtn);
       $("#dropDown").prepend(aTag);
 
     console.log("array==>", artists_A);
@@ -205,7 +268,7 @@ async function addTopArtist(artistName) {
       return;
     } 
     response = await getGiphy(topArtist);
-    topArtist.img = response.data[0].images.fixed_height_still.url;
+    topArtist.img = response.data[0].images.fixed_width_still.url;
     //
     // get albums
     //
@@ -217,6 +280,7 @@ async function addTopArtist(artistName) {
     //
     // display stuff
     //
+    // displayArtist(".container-fluid", topArtist);
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
     
@@ -245,24 +309,44 @@ $(document).ready(function() { //  Beginning of jQuery
   })
 
   database.ref().orderByChild("visits").on("child_added", function(snapshot) {
-    console.log("snapshot==>", snapshot.val());
-    //   artistInfo.key = snapshot.key;
-    //   artistInfo.name = snapshot.val().name;
-    //   artistInfo.id = snapshot.val().id;
-    //   artistInfo.visits = snapshot.val().visits;
-    artistsBase.push({
+      artistsBase.push({
       key: snapshot.key,
       name: snapshot.val().name,
       id: snapshot.val().id,
       visits: snapshot.val().visits
     });
-    console.log(artistsBase);
+    // console.log(artistsBase);
     if (topCount < topNum) {
+      defaultIds.push(snapshot.val().name);
       topCount++;
+      
+      var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
+                       .attr("href", youTubeUrl + snapshot.val().name.replace(" ", "+") + "+music")
+                       .text(snapshot.val().name)  
+
+      // $("#favorite").prepend(myBtn);
+      // $("#dropDown").prepend(aTag);
+      
+      // displayArtist("#image-view", snapshot.val);
       // $("#topList").append($("<li>").text("hhhk"));
+
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
-    }
+    } 
   })
+  setTimeout ( function () {
+    console.log(defaultIds);
+    function doit(n) {
+       n--; 
+       if (n>=0) {
+         setTimeout (function ()  {
+           addTopArtist(defaultIds[n]);
+           doit(n);
+         }, 2000) 
+       }
+    }
+    doit(topNum);
+  } , 2000);
+   
 
   // Add Top 5 buttons
 
