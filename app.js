@@ -1,5 +1,5 @@
 // var artURL = "https://musixmatchcom-musixmatch.p.rapidapi.com/wsr/1.1/artist.search?s_artist_rating=desc&q_artist=coldplay&page=1&page_size=5";
-
+// var APIKey  = "06c8a00ef2d73494bffa451b45e887bc";   Jason's API key
 var APIKey = "5eafbf6ac992f091396b3310ca394d21";
 var corsUrl = "https://cors-anywhere.herokuapp.com/";
 var artistUrl = "https://api.musixmatch.com/ws/1.1/artist.search?q_artist=";
@@ -17,14 +17,17 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 var youTubeUrl = "https://www.youtube.com/results?search_query=";
 
 // https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=lady+gaga+music&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU
+// jason's YouTube API    AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4
 
 youTubeSearch = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=";
-youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
+// youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
+youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4"         //jason
 
 var artists = [];
 var topArtist = {};
 
-var topNum = 6;
+
+var topNum = 12;
 var topCount = 0;
 var numCol = 3;
 var iAdded = 0;
@@ -59,14 +62,16 @@ function updateArtist(artist) {
   //
   // if not new update
   if (i >= 0) {
-    artists[i].visits--;
+    console.log(artists[i]);
+    artist.visits = --artists[i].visits;  // need to update artist also for firebase
+    
     database.ref(ref).child(artists[i].key).remove();
     artists.splice(i, 1);
   } else {
     //
     // newly created
     //
-    artist.visits = -1;
+    artist.visits = -1;   
     i = artists.length;
     artists.push(artist);
   }
@@ -87,7 +92,12 @@ function displayArtist(tag, artist) {
   }
   var albumList = "";
   artist.albums.forEach(function(e) {
-    albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    if (e.relDate.trim() !== "") {
+      albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    } else {
+      albumList = albumList + "<li>" + e.name + "</li>";
+    }
+    
   })
 
   if ((iAdded % numCol) === 0) { // add a new row
@@ -183,6 +193,7 @@ async function getArtistRating(artists) {
       }
     }
   });
+  return topArtist.rating;
 }
 
 async function getGiphy(topArtist) {
@@ -242,7 +253,8 @@ async function addArtist(artistName) {
 
     topArtist.youTube = "https://www.youtube.com/watch?v=" + youTubeUrl;
 
-    topArtist.visits = 0;
+
+    topArtist.visits = -1;
 
     updateArtist(topArtist);
     displayArtist("#image-view", topArtist);
@@ -289,6 +301,23 @@ $(document).ready(function() { //  Beginning of jQuery
         .text(snapshot.val().name)
 
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) + " searches)"));
+
+      // Jason Added
+      
+      console.log(snapshot.val());
+      var topArtist = {
+        name: snapshot.val().name,
+        twitter: snapshot.val().twitter,
+        visits: snapshot.val().visits,
+        img: snapshot.val().img,
+        youTube: snapshot.val().youTube,
+        albums: snapshot.val().albums
+      } 
+
+      displayArtist("#image-view", topArtist);
+      updateStatus(topArtist);
+      artists.push(topArtist);
+
     }
   });
 });
