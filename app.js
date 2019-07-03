@@ -26,7 +26,7 @@ youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyCWrgUE53Bca3gl5m-8RxiC
 var artists = [];
 var topArtist = {};
 
-var topNum = 10;
+var topNum = 12;
 var topCount = 0;
 var numCol = 3;
 var iAdded = 0;
@@ -61,14 +61,16 @@ function updateArtist(artist) {
   //
   // if not new update
   if (i >= 0) {
-    artists[i].visits--;
+    console.log(artists[i]);
+    artist.visits = --artists[i].visits;  // need to update artist also for firebase
+    
     database.ref(ref).child(artists[i].key).remove();
     artists.splice(i, 1);
   } else {
     //
     // newly created
     //
-    artist.visits = -1;
+    artist.visits = -1;   
     i = artists.length;
     artists.push(artist);
   }
@@ -89,7 +91,12 @@ function displayArtist(tag, artist) {
   }
   var albumList = "";
   artist.albums.forEach(function(e) {
-    albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    if (e.relDate.trim() !== "") {
+      albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    } else {
+      albumList = albumList + "<li>" + e.name + "</li>";
+    }
+    
   })
 
   if ((iAdded % numCol) === 0) { // add a new row
@@ -185,6 +192,7 @@ async function getArtistRating(artists) {
       }
     }
   });
+  return topArtist.rating;
 }
 
 async function getGiphy(topArtist) {
@@ -245,7 +253,7 @@ async function addArtist(artistName) {
     topArtist.youTube = "https://www.youtube.com/watch?v=" + youTubeUrl;
 
 
-    topArtist.visits = 0;
+    topArtist.visits = -1;
 
     updateArtist(topArtist);
     displayArtist("#image-view", topArtist);
@@ -305,6 +313,8 @@ $(document).ready(function() { //  Beginning of jQuery
       } 
 
       displayArtist("#image-view", topArtist);
+      updateStatus(topArtist);
+      artists.push(topArtist);
 
     }
   });
