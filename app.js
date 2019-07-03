@@ -24,7 +24,7 @@ youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1
 var artists = [];
 var topArtist = {};
 
-var topNum = 10;
+var topNum = 6;
 var topCount = 0;
 var numCol = 3;
 var iAdded = 0;
@@ -92,7 +92,7 @@ function displayArtist(tag, artist) {
 
   if ((iAdded % numCol) === 0) { // add a new row
     newTag = $(`<div class="row" id="program-added-${iAdded}">`);
-    $(tag).prepend(newTag);
+    $(tag).append(newTag);
   } else {
     newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
   }
@@ -280,7 +280,8 @@ $(document).ready(function() { //  Beginning of jQuery
     artists.push(artist);
 
     if (topCount < topNum) {
-      defaultIds.push(snapshot.val().name);
+      displayArtist("#image-view", artist);
+
       topCount++;
 
       var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
