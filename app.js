@@ -55,7 +55,6 @@ var artistInfo = {
 
 
 function updateArtist(artist) {
-  console.log('updateArtist');
   var i = artists.findIndex(obj => obj.id === artist.id);
   //
   // if not new update
