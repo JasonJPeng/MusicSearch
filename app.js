@@ -1,5 +1,5 @@
 // var artURL = "https://musixmatchcom-musixmatch.p.rapidapi.com/wsr/1.1/artist.search?s_artist_rating=desc&q_artist=coldplay&page=1&page_size=5";
-
+// var APIKey  = "06c8a00ef2d73494bffa451b45e887bc";   Jason's API key
 var APIKey = "5eafbf6ac992f091396b3310ca394d21";
 var corsUrl = "https://cors-anywhere.herokuapp.com/";
 var artistUrl = "https://api.musixmatch.com/ws/1.1/artist.search?q_artist=";
@@ -17,9 +17,11 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 var youTubeUrl = "https://www.youtube.com/results?search_query=";
 
 // https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=lady+gaga+music&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU
+// jason's YouTube API    AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4
 
 youTubeSearch = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=";
-youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
+// youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
+youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4"         //jason
 
 var artists = [];
 var topArtist = {};
@@ -242,6 +244,7 @@ async function addArtist(artistName) {
 
     topArtist.youTube = "https://www.youtube.com/watch?v=" + youTubeUrl;
 
+
     topArtist.visits = 0;
 
     updateArtist(topArtist);
@@ -288,6 +291,21 @@ $(document).ready(function() { //  Beginning of jQuery
         .text(snapshot.val().name)
 
       $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) + " searches)"));
+
+      // Jason Added
+      
+      console.log(snapshot.val());
+      var topArtist = {
+        name: snapshot.val().name,
+        twitter: snapshot.val().twitter,
+        visits: snapshot.val().visits,
+        img: snapshot.val().img,
+        youTube: snapshot.val().youTube,
+        albums: snapshot.val().albums
+      } 
+
+      displayArtist("#image-view", topArtist);
+
     }
   });
 });
