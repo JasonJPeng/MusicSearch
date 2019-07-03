@@ -55,6 +55,7 @@ var artistInfo = {
 
 
 function updateArtist(artist) {
+  console.log('updateArtist');
   var i = artists.findIndex(obj => obj.id === artist.id);
   //
   // if not new update
@@ -77,7 +78,7 @@ function updateArtist(artist) {
 }
 
 function displayArtist(tag, artist) {
-  nameSearched = artist.name + "(" + -artist.visits  + ")";
+  nameSearched = artist.name + "(" + -artist.visits + ")";
 
   var twt = ""
   if (artist.twitter !== "") {
@@ -232,7 +233,7 @@ async function addArtist(artistName) {
     try {
       response = await getYouTube(topArtist);
       youTubeUrl = response.items[0].id.videoId;
-    } catch(error) {
+    } catch (error) {
       //
       // safety when api limit reached
       //
@@ -274,8 +275,11 @@ $(document).ready(function() { //  Beginning of jQuery
   })
 
   database.ref(ref).orderByChild("visits").on("child_added", function(snapshot) {
-    artists.push(snapshot.val());
-    // console.log(artists);
+    var artist = snapshot.val();
+
+    artist.key = snapshot.key;
+    artists.push(artist);
+
     if (topCount < topNum) {
       defaultIds.push(snapshot.val().name);
       topCount++;
