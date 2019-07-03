@@ -5,6 +5,10 @@ body {
     font-family: 'Alegreya Sans SC', sans-serif;
 }
 
+.navbar {
+    background: red;
+}
+
 img {
     margin: 0 !important;
 }
@@ -44,7 +48,7 @@ div>div>img.d-block{
 h1 {
     position: absolute;
      z-index: 5; 
-    color: pink;
+    color: white;
     /* margin: 300px 0 40px 300px; */
     font-size: 6em;
     right: 50px;
