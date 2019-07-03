@@ -1,4 +1,4 @@
-# Heading level 1 MusicSearch
+# MusicSearch
 ### *by Team JFK*
 
 One of the simple joys in life for many people is the experience of getting into a new band or composer. Everybody remembers the first time they heard that special album by their favorite group, and had to know more - what else have these guys recorded? What do they look like? Are there any videos of them? And most critically, are they on Twitter?!
