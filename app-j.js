@@ -1,14 +1,12 @@
 // var artURL = "https://musixmatchcom-musixmatch.p.rapidapi.com/wsr/1.1/artist.search?s_artist_rating=desc&q_artist=coldplay&page=1&page_size=5";
-// var APIKey  = "06c8a00ef2d73494bffa451b45e887bc";   Jason's API key
-var APIKey = "5eafbf6ac992f091396b3310ca394d21";
+
+
+var APIKey  = "06c8a00ef2d73494bffa451b45e887bc";
+// var APIKey = "5eafbf6ac992f091396b3310ca394d21";
 var corsUrl = "https://cors-anywhere.herokuapp.com/";
 var artistUrl = "https://api.musixmatch.com/ws/1.1/artist.search?q_artist=";
 var albumUrl = "https://api.musixmatch.com/ws/1.1/artist.albums.get?artist_id=";
 
-//
-// proxy on my system --- zane
-// corsUrl = 'http://localhost:8080/';
-//
 // giphy Example: http://api.giphy.com/v1/gifs/search?q=pig&api_key=453HTooEbMcLLHXzAyh12R3VvCGhpBWI
 var giphyKey = "453HTooEbMcLLHXzAyh12R3VvCGhpBWI";
 var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
@@ -17,22 +15,18 @@ var giphyUrl = "https://api.giphy.com/v1/gifs/search?q=";
 var youTubeUrl = "https://www.youtube.com/results?search_query=";
 
 // https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=lady+gaga+music&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU
-// jason's YouTube API    AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4
 
 youTubeSearch = "https://www.googleapis.com/youtube/v3/search?part=snippet&order=viewCount&q=";
-// youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
-youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyCWrgUE53Bca3gl5m-8RxiCXJXwhU0pwE4"         //jason
+youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyDDw868uWMQLgWbAeDORWY1sE9W2e_43fU";
 
-var artists = [];
+var artists_A = [];
 var topArtist = {};
 
-
-var topNum = 12;
+var topNum = 10;
 var topCount = 0;
 var numCol = 3;
 var iAdded = 0;
 
-var ref = 'zane/'
 var defaultIds = [];
 
 var config = {
@@ -48,7 +42,7 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-var artists = [];
+var artistsBase = [];
 var artistInfo = {
   key: "",
   name: "",
@@ -57,61 +51,48 @@ var artistInfo = {
 };
 
 
-function updateArtist(artist) {
-  var i = artists.findIndex(obj => obj.id === artist.id);
-  //
-  // if not new update
-  if (i >= 0) {
-    console.log(artists[i]);
-    artist.visits = --artists[i].visits;  // need to update artist also for firebase
-    
-    database.ref(ref).child(artists[i].key).remove();
-    artists.splice(i, 1);
-  } else {
-    //
-    // newly created
-    //
-    artist.visits = -1;   
-    i = artists.length;
-    artists.push(artist);
-  }
+function displayArtist(tag, A) {
 
-  var k = database.ref(ref).push(
-    artist
-  );
+  // Updating the array
+var aa = artistsBase.findIndex(obj => obj.id === A.id);
+var visit1 = -1;
+
+if (aa >= 0) { // updating
+  visit1 = artistsBase[aa].visits - 1;
+  database.ref().child(artistsBase[aa].key).remove();
+  artistsBase.splice(aa, 1);
 }
 
-function displayArtist(tag, artist) {
-  nameSearched = artist.name + "(" + -artist.visits + ")";
+var k = database.ref().push({
+  name: A.name,
+  id: A.id,
+  visits: visit1
+})
+   nameSearched = A.name + "(" + visit1*(-1) +")";
 
-  var twt = ""
-  if (artist.twitter !== "") {
+    var twt = ""
+    if (A.twitter !== "") {
 
-    twt = "twitter:  " +
-      "<a href=" + artist.twitter + "  target = _blank>" + artist.twitter + "</a>";
-  }
-  var albumList = "";
-  artist.albums.forEach(function(e) {
-    if (e.relDate.trim() !== "") {
-      albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
-    } else {
-      albumList = albumList + "<li>" + e.name + "</li>";
+       twt = "twitter:  " + 
+             "<a href=" + A.twitter + "  target = _blank>" + A.twitter +"</a>" ;
     }
+    var albumList = "";
+    A.albums.forEach(function(e) {
+       albumList = albumList + "<li>" + e.name + "(" + e.relDate + ")</li>";
+    })
     
-  })
-
-  if ((iAdded % numCol) === 0) { // add a new row
-    newTag = $(`<div class="row" id="program-added-${iAdded}">`);
-    $(tag).prepend(newTag);
-  } else {
-    newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
-  }
-  iAdded++;
+   if ((iAdded % numCol) === 0 ) {  // add a new row
+     newTag = $(`<div class="row" id="program-added-${iAdded}">`);
+     $(tag).prepend(newTag);
+   } else {
+      newTag = $(`#program-added-${parseInt(iAdded/numCol)*numCol}`);
+   }
+   iAdded++;
   var htmlCode = `
   <div class="col-md-4">
                     <div class="card">
                         <img class="card-img-top"
-                            src="${artist.img}"
+                            src="${A.img}"
                             alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">${nameSearched}</h5>
@@ -119,23 +100,26 @@ function displayArtist(tag, artist) {
                             <ul>
                             ${albumList}
                             </ul>
-                            <a href="${artist.youTube}" target="popup" class="btn btn-primary">Play</a>
+                            <a href="${A.youTube}" target="popup" class="btn btn-primary">Play</a>
                         </div>
                     </div>
                 </div>
   `;
-  // check out button , no use now
+   // check out button , no use now
   // <a href="#" class="btn btn-primary">Play</a>
-  $(newTag).prepend($(htmlCode));
+$(newTag).prepend($(htmlCode));
+
+
+
 }
 
 
 async function getYouTube(topArtist) {
-  return $.ajax({
-    url: corsUrl + youTubeSearch + topArtist.name.replace(" ", "+") + "+music" + youTubeAPI,
-    method: "GET",
-    dataType: "json"
-  })
+   return $.ajax({
+      url: youTubeSearch + topArtist.name.replace(" ", "+") + "+music" + youTubeAPI,
+      method: "GET",
+      dataType: "json"
+   })
 }
 
 async function getAlbums(topArtist) {
@@ -150,30 +134,32 @@ async function saveAlbumInfo(response) {
   var albums = response.message.body.album_list;
   albums.forEach(function(albm) {
     albmName = albm.album.album_name;
-
-    if (topArtist.albums.findIndex(o => o.name === albmName) < 0) { // Album Name not found
-      albmRel = albm.album.album_release_date;
-      topArtist.albums.push({
-        name: albmName,
-        relDate: albmRel
-      });
-    } // end If
+    
+    if (topArtist.albums.findIndex(o => o.name === albmName ) < 0) {  // Album Name not found
+       albmRel = albm.album.album_release_date;
+       topArtist.albums.push({
+       name: albmName,
+       relDate: albmRel
+     });
+    } // end If 
   });
 }
 
 async function updateStatus(topArtist) {
   $("#status").text("Top Artist: " + topArtist.name);
 
-  if (artists.indexOf(topArtist.name) < 0) {
-    artists.push(topArtist.name);
+  if (artists_A.indexOf(topArtist.name) < 0) {
+    artists_A.push(topArtist.name);
     // var myBtn = ($("<button>").addClass("TopArtist")
     //   .val(topArtist.name).text(topArtist.name));
     var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
-      .attr("href", youTubeUrl + topArtist.name.replace(" ", "+") + "+music")
-      .text(topArtist.name)
+                       .attr("href", youTubeUrl + topArtist.name.replace(" ", "+") + "+music")
+                       .text(topArtist.name)  
 
-    // $("#favorite").prepend(myBtn);
-    $("#dropDown").prepend(aTag);
+      // $("#favorite").prepend(myBtn);
+      $("#dropDown").prepend(aTag);
+
+    console.log("array==>", artists_A);
   }
 }
 
@@ -192,8 +178,10 @@ async function getArtistRating(artists) {
         albums: []
       }
     }
-  });
-  return topArtist.rating;
+    //   console.log(topArtist);
+  }) //  end of loop all artists
+  return rating;
+
 }
 
 async function getGiphy(topArtist) {
@@ -214,7 +202,7 @@ async function getArtist(artistName) {
   });
 }
 
-async function addArtist(artistName) {
+async function addTopArtist(artistName) {
   try {
     var rating = 0;
     var response = await getArtist(artistName);
@@ -223,11 +211,11 @@ async function addArtist(artistName) {
     // get artist rating, bail if < 20
     //
     rating = await getArtistRating(artists);
-
+    
     if (rating < 20) {
       $("#status").text("No artist found");
       return;
-    }
+    } 
     response = await getGiphy(topArtist);
     topArtist.img = response.data[0].images.fixed_width_still.url;
     //
@@ -239,32 +227,19 @@ async function addArtist(artistName) {
     //
     saveAlbumInfo(response);
 
-    var youTubeUrl;
-    try {
-      response = await getYouTube(topArtist);
-      youTubeUrl = response.items[0].id.videoId;
-    } catch (error) {
-      //
-      // safety when api limit reached
-      //
-      youTubeUrl = 'https://www.youtube.com/watch?v=aEb5gNsmGJ8';
-    }
-
-
-    topArtist.youTube = "https://www.youtube.com/watch?v=" + youTubeUrl;
-
-
-    topArtist.visits = -1;
-
-    updateArtist(topArtist);
+    // get YouTube Stuff
+    response = await getYouTube(topArtist);
+    topArtist.youTube = "https://www.youtube.com/watch?v=" + response.items[0].id.videoId
+    console.log(response.items[0].id.videoId);
+    //
+    // display stuff
+    //
+    // displayArtist(".container-fluid", topArtist);
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
-
-    // scroll automatically
-    $("#scrollMe").scrollTo(0, -486);
-
+    
   } catch (error) {
-    console.log("ERROR: ", error)
+    console.log("ERROR: ",error)
   };
 }
 
@@ -279,7 +254,7 @@ $(document).ready(function() { //  Beginning of jQuery
     var artistName = $("#input-artist").val().trim();
     topCount = topNum
     $("#status").text("Searching " + artistName + " ....");
-    addArtist(artistName);
+    addTopArtist(artistName);
   })
 
   $(document).on("click", ".TopArtist", function() {
@@ -288,39 +263,58 @@ $(document).ready(function() { //  Beginning of jQuery
 
   })
 
-  database.ref(ref).orderByChild("visits").on("child_added", function(snapshot) {
-    var artist = snapshot.val();
-
-    artist.key = snapshot.key;
-    artists.push(artist);
-
+  database.ref().orderByChild("visits").on("child_added", function(snapshot) {
+      artistsBase.push({
+      key: snapshot.key,
+      name: snapshot.val().name,
+      id: snapshot.val().id,
+      visits: snapshot.val().visits
+    });
+    // console.log(artistsBase);
     if (topCount < topNum) {
-      displayArtist("#image-view", artist);
-
+      defaultIds.push(snapshot.val().name);
       topCount++;
-
-      var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
-        .attr("href", youTubeUrl + snapshot.val().name.replace(" ", "+") + "+music")
-        .text(snapshot.val().name)
-
-      $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) + " searches)"));
-
-      // Jason Added
       
-      console.log(snapshot.val());
-      var topArtist = {
-        name: snapshot.val().name,
-        twitter: snapshot.val().twitter,
-        visits: snapshot.val().visits,
-        img: snapshot.val().img,
-        youTube: snapshot.val().youTube,
-        albums: snapshot.val().albums
-      } 
+      var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
+                       .attr("href", youTubeUrl + snapshot.val().name.replace(" ", "+") + "+music")
+                       .text(snapshot.val().name)  
 
-      // displayArtist("#image-view", topArtist);
-      updateStatus(topArtist);
-      artists.push(topArtist);
+      // $("#favorite").prepend(myBtn);
+      // $("#dropDown").prepend(aTag);
+      
+      // displayArtist("#image-view", snapshot.val);
+      // $("#topList").append($("<li>").text("hhhk"));
 
+      $("#topList").append($("<li>").text(snapshot.val().name + "(" + snapshot.val().visits * (-1) +" searches)"));
+    } 
+  })
+  setTimeout ( function () {
+    console.log(defaultIds);
+    function doit(n) {
+       n--; 
+       if (n>=0) {
+         setTimeout (function ()  {
+           addTopArtist(defaultIds[n]);
+           doit(n);
+         }, 2000) 
+       }
     }
-  });
-});
+    doit(defaultIds.length);
+  } , 5000);
+   
+
+  // Add Top 5 buttons
+
+  //   for (i = (artistsBase.length -1); (i>=0) && (i > artistsBase.length - 5) ; i -- ) {
+
+
+
+
+  //   }
+
+  //   // Find all artists
+  //   $("#add-artist").on("click", function () {
+  //  addTopArtist();
+  //   })
+
+}) // end of document ready

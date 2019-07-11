@@ -122,11 +122,16 @@ hr {
       margin: 0 20px 0 0
   }
   
-  footer {
+  /* footer {
       background: gray;
       height: 50px;
-  }
+  } */
 
   #status {
       color:white;
+  }
+
+  #scroll-me {
+      position: absolute;
+      top:0px;
   }

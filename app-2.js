@@ -26,7 +26,6 @@ youTubeAPI = "&type=video+&videoDefinition=high&key=AIzaSyCWrgUE53Bca3gl5m-8RxiC
 var artists = [];
 var topArtist = {};
 
-
 var topNum = 12;
 var topCount = 0;
 var numCol = 3;
@@ -260,9 +259,6 @@ async function addArtist(artistName) {
     displayArtist("#image-view", topArtist);
     updateStatus(topArtist);
 
-    // scroll automatically
-    $("#scrollMe").scrollTo(0, -486);
-
   } catch (error) {
     console.log("ERROR: ", error)
   };
@@ -295,8 +291,7 @@ $(document).ready(function() { //  Beginning of jQuery
     artists.push(artist);
 
     if (topCount < topNum) {
-      displayArtist("#image-view", artist);
-
+      defaultIds.push(snapshot.val().name);
       topCount++;
 
       var aTag = $("<a>").addClass("dropdown-item").attr("target", "_blank")
@@ -317,7 +312,7 @@ $(document).ready(function() { //  Beginning of jQuery
         albums: snapshot.val().albums
       } 
 
-      // displayArtist("#image-view", topArtist);
+      displayArtist("#image-view", topArtist);
       updateStatus(topArtist);
       artists.push(topArtist);
 
