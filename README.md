@@ -32,7 +32,7 @@ The program starts with the top 12 most searched artists
 
 ![The program starts with the top 12 most searched artists](./images/top12.png)
 
-Each searched artist is shown in a "card" with pictures 
+Each searched artist is shown in a "card" with picture, twitter account, albums and a click to the post popular YouTube video 
 
 <img src="./images/card.png" width=200>
 
