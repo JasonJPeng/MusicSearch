@@ -314,7 +314,7 @@ $(document).ready(function() { //  Beginning of jQuery
         albums: snapshot.val().albums
       } 
 
-      displayArtist("#image-view", topArtist);
+      // displayArtist("#image-view", topArtist);
       updateStatus(topArtist);
       artists.push(topArtist);
 
