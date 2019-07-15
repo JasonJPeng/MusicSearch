@@ -21,7 +21,18 @@ Wikipedia bios
 Friends lists*
 
 ----
-### coding challenges
-This program invokes a "chain" API calls to different websites. We have to carefully arrange the callback functions because we cannot expect a timely return from each API call.    
 
+### coding challenges
+> This program invokes a "chain" API calls to different websites. We have to carefully arrange the callback functions because we cannot expect a timely return from each API call.   
+
+
+----
+The program starts with the top 12 most searched artists
+
+
+![The program starts with the top 12 most searched artists](./images/top12.png)
+
+Each searched artist is shown in a "card" with pictures 
+
+<img src="./images/card.png" width=200>
 
